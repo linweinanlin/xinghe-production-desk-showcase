@@ -1,0 +1,14 @@
+# 系统与编辑器
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# 临时文件
+*.log
+*.tmp
+~$*
+
+# 截图原图（仓库只保留压缩后的 jpg）
+screenshots/**/*.png

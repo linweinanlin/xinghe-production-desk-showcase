@@ -1,0 +1,33 @@
+星河制片台 · 归属与第三方说明
+Xinghe Production Desk — Attribution and Third-Party Notices
+
+一、上游项目
+本项目的原版为 MIT 许可的开源项目：
+
+    AI Drama Pipeline
+    Copyright (c) 2026 AI Drama Pipeline contributors
+    License: MIT
+
+MIT 许可允许使用、修改、分发与商业使用，条件是保留上述版权声明与许可全文。
+本仓库所展示的软件是上述项目的衍生作品，不是从零开始的独立实现。
+上游许可全文见 https://opensource.org/license/mit
+
+二、本仓库新增的部分
+以下部分为 linweinanlin 在原项目基础上新增或重写，著作权归其所有：
+
+  · 模型与配置的四级层级架构、schema 生成与配置界面
+  · 桌面外壳（单窗口、进程守护、热重载、下载处理）
+  · 出处校验体系（SHA-256 清单、RSA-2048 签名、启动拦截）
+  · 项目搬迁工具、项目改名、若干交互与排版修复
+
+三、本仓库内容
+本仓库只包含文档、截图与说明文字，不含源代码。其许可见 LICENSE。
+
+四、运行依赖（软件本体用到的第三方件，均不在本仓库内分发）
+  · PySide6 / Qt 6 — LGPL-3.0
+  · FFmpeg — 依构建版本可能为 LGPL 或 GPL
+  · Pillow、requests、numpy、opencv-python 等 Python 包 — 各自的 BSD/MIT/Apache 许可
+  · 各模型服务（OpenAI、火山方舟、阿里云百炼、智谱、腾讯混元等）— 各自的服务条款
+
+五、截图中的项目内容
+截图中的剧本、角色与画面均为作者本人项目中的素材，仅用于功能演示。

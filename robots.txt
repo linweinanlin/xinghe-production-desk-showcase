@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://linweinanlin.github.io/xinghe-production-desk-showcase/sitemap.xml

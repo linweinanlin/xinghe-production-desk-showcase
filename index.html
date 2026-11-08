@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>星河制片台 · Xinghe Production Desk｜AI 漫剧本地制片工作台（项目展示）</title>
+<meta name="description" content="星河制片台是一套面向短剧 / 漫剧生产的本机桌面工作台，把剧本、节拍、资产、分镜、生成、交付收进一条可视化流水线。含四级模型配置、出处签名校验、136 项单测与成片交付链路。">
+<meta name="keywords" content="星河制片台, Xinghe Production Desk, AI 漫剧, 短剧制作, 分镜, PySide6, 本地桌面应用, FFmpeg, 剪映草稿, 作品集, linweinanlin">
+<meta name="author" content="linweinanlin">
+<meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large">
+<link rel="canonical" href="https://linweinanlin.github.io/xinghe-production-desk-showcase/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="星河制片台 · Xinghe Production Desk">
+<meta property="og:description" content="从文字到镜头：短剧 / 漫剧生产的本机桌面工作台。项目说明、界面截图与工程实践记录。">
+<meta property="og:url" content="https://linweinanlin.github.io/xinghe-production-desk-showcase/">
+<meta property="og:image" content="https://linweinanlin.github.io/xinghe-production-desk-showcase/screenshots/01-overview.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  :root {
+    --ink: #1b2230; --muted: #5b6472; --line: #e2e6ec; --bg: #f6f7f9;
+    --card: #ffffff; --accent: #2d5bd7; --accent-soft: #eaf0ff; --code: #f0f2f6;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+    font: 16px/1.75 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", sans-serif; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+  header { background: var(--card); border-bottom: 1px solid var(--line); }
+  .top { display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 0; gap: 16px; flex-wrap: wrap; }
+  .brand { font-weight: 700; font-size: 17px; letter-spacing: .3px; }
+  .brand small { color: var(--muted); font-weight: 400; margin-left: 8px; }
+  nav a { margin-left: 18px; font-size: 14px; color: var(--muted); }
+  nav a:hover { color: var(--accent); }
+  .hero { padding: 56px 0 40px; }
+  .hero h1 { font-size: 34px; line-height: 1.35; margin: 0 0 14px; letter-spacing: -.5px; }
+  .hero .lead { font-size: 17px; color: var(--muted); max-width: 760px; margin: 0 0 22px; }
+  .badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px; }
+  .badge { background: var(--accent-soft); color: var(--accent); border: 1px solid #d5e0ff;
+    padding: 4px 11px; border-radius: 999px; font-size: 13px; }
+  .badge.ghost { background: #fff; color: var(--muted); border-color: var(--line); }
+  .shot { width: 100%; border: 1px solid var(--line); border-radius: 12px; display: block;
+    box-shadow: 0 8px 28px rgba(27,34,48,.07); }
+  section { padding: 34px 0 6px; }
+  h2 { font-size: 22px; margin: 0 0 6px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+  .sub { color: var(--muted); font-size: 14px; margin: 10px 0 20px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; }
+  .card h3 { margin: 0 0 8px; font-size: 16px; }
+  .card p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
+  table { width: 100%; border-collapse: collapse; background: var(--card);
+    border: 1px solid var(--line); border-radius: 10px; overflow: hidden; font-size: 14px; }
+  th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { background: #fafbfc; width: 150px; white-space: nowrap; }
+  tr:last-child td { border-bottom: 0; }
+  pre { background: var(--code); border: 1px solid var(--line); border-radius: 10px;
+    padding: 16px 18px; overflow-x: auto; font-size: 13px; line-height: 1.65; }
+  ul { padding-left: 20px; } li { margin: 7px 0; }
+  .note { background: #fff; border-left: 3px solid var(--accent); padding: 14px 18px;
+    border-radius: 0 8px 8px 0; color: var(--muted); font-size: 14px; margin: 18px 0; }
+  .shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .shots img { width: 100%; border: 1px solid var(--line); border-radius: 10px; display: block; }
+  .shots figcaption { font-size: 13px; color: var(--muted); margin-top: 6px; }
+  .cta { display: flex; gap: 12px; flex-wrap: wrap; margin: 24px 0 8px; }
+  .btn { background: var(--accent); color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 15px; }
+  .btn.alt { background: #fff; color: var(--accent); border: 1px solid var(--accent); }
+  .btn:hover { text-decoration: none; opacity: .9; }
+  footer { border-top: 1px solid var(--line); margin-top: 48px; padding: 24px 0 40px;
+    color: var(--muted); font-size: 13px; }
+  @media (max-width: 600px) { .hero h1 { font-size: 26px; } nav a { margin-left: 12px; } }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "星河制片台",
+  "alternateName": "Xinghe Production Desk",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Windows 10/11",
+  "description": "面向短剧 / 漫剧生产的本机桌面工作台，把剧本、节拍、资产、分镜、生成与交付收进一条可视化流水线。",
+  "url": "https://linweinanlin.github.io/xinghe-production-desk-showcase/",
+  "author": { "@type": "Person", "name": "linweinanlin",
+    "url": "https://github.com/linweinanlin" },
+  "isBasedOn": {
+    "@type": "SoftwareSourceCode",
+    "name": "AI Drama Pipeline",
+    "license": "https://opensource.org/license/mit",
+    "copyrightHolder": "AI Drama Pipeline contributors"
+  },
+  "image": "https://linweinanlin.github.io/xinghe-production-desk-showcase/screenshots/01-overview.jpg"
+}
+</script>
+</head>
+<body>
+<header>
+  <div class="wrap top">
+    <div class="brand">星河制片台 <small>Xinghe Production Desk</small></div>
+    <nav>
+      <a href="#features">核心能力</a>
+      <a href="#highlight">技术亮点</a>
+      <a href="#engineering">工程实践</a>
+      <a href="#origin">来源与许可</a>
+      <a href="https://github.com/linweinanlin/xinghe-production-desk-showcase">GitHub 仓库</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>从文字到镜头<br>把一部竖屏短剧 / 漫剧放进一个本机工作台</h1>
+    <p class="lead">剧本 → 节拍 → 资产 → 分镜 → 生成 → 交付，收进一条可视化流水线。桌面应用（PySide6 + 本地 HTTP 服务），所有模型调用由使用者自己配置，不伪造生成结果。</p>
+    <div class="badges">
+      <span class="badge">Python 3.9+</span>
+      <span class="badge">PySide6 / Qt 6</span>
+      <span class="badge">原生 JS · 无构建</span>
+      <span class="badge">136 项单测</span>
+      <span class="badge">出处签名校验</span>
+      <span class="badge ghost">本机运行 · 源码私有</span>
+    </div>
+    <img class="shot" src="screenshots/01-overview.jpg" alt="星河制片台主界面：项目与剧集总览">
+  </div>
+
+  <div class="note">
+    <strong>关于「上线」：</strong>本页是项目的公开作品集主页，可公开访问、可被搜索引擎收录。软件本体是本机桌面应用 —— 只监听 <code>127.0.0.1</code>，使用者自备各家模型服务的 API Key，剧本与成片全部留在本机，因此不提供在线试用；交付方式是「可复现的运行包 + 本机运行」。
+  </div>
+
+  <section id="features">
+    <h2>核心能力</h2>
+    <p class="sub">不是「一键出片」的玩具：系统只负责编排、调度、校验和打包，生成结果取决于你自己配置的模型服务。</p>
+    <table>
+      <tr><th>项目 / 剧集</th><td>多项目并存、按集推进；项目可导出为 JSON，支持从旧安装一键搬迁项目与媒体</td></tr>
+      <tr><th>剧本拆解</th><td>剧本编辑、AI 续写 / 改写、本地拆分情节节拍、历史版本回滚</td></tr>
+      <tr><th>角色与资产</th><td>角色 / 场景 / 道具三类资产，定妆图、三视图、变体管理，提示词与历史归档</td></tr>
+      <tr><th>创作控制</th><td>镜头级参数（景别、运镜、风格、音轨等）按能力字段动态渲染，不出现无意义选项</td></tr>
+      <tr><th>分镜导演</th><td>由节拍一键生成分镜、镜头入队、失败重试与筛选、逐镜状态追踪</td></tr>
+      <tr><th>生成执行</th><td>任务队列与并发控制、额度保护开关；请求全部走本地代理，密钥不出本机</td></tr>
+      <tr><th>交付中心</th><td>SRT 字幕、分镜 CSV、提示词包、EDL、封面、剪辑工程包（明文草稿 + 剪辑清单 CSV + SRT，自动探测剪映草稿格式）、FFmpeg 成片合成</td></tr>
+      <tr><th>模型与设置</th><td>四级配置：模块 → 服务商 → 模型 → 参数</td></tr>
+    </table>
+  </section>
+
+  <section id="highlight">
+    <h2>技术亮点：把写死的模型配置改成可扩展的四级结构</h2>
+    <p class="sub">这是整个项目里做得最重的一块。原版把 3 个模块的模型清单、默认值、表单字段硬编码在界面里，新增一家服务商要改 4 个文件、5 处判断，改漏一处界面就和后端对不上。</p>
+<pre>模块（对话 / 图片 / 视频）
+└── 服务商（OpenAI / 火山方舟 / 阿里云百炼 / 智谱 / 腾讯混元 / MiniMax / 海螺 …）
+    └── 模型（每个模型自己的能力与默认值）
+        └── 参数（类型、范围、枚举、是否真正进请求）</pre>
+    <div class="grid">
+      <div class="card"><h3>单一数据源</h3><p>以 <code>web/assets/provider-schema.js</code> 为唯一来源，界面按表渲染表单与导航。当前 3 个模块 / 12 家服务商 / 32 个模型 / 99 个参数项。</p></div>
+      <div class="card"><h3>参数取值优先级</h3><p>模型级显式值 → 服务商级（需通过兼容性校验）→ 模型默认值，避免不兼容模型被服务商默认值污染。</p></div>
+      <div class="card"><h3>老配置迁移</h3><p>升级后地址、模型与自定义参数不会被「与预设不一致就重置」的旧逻辑抹掉。</p></div>
+      <div class="card"><h3>如实标注</h3><p>哪些参数真正进请求、哪些只做存档，界面明确区分；服务商差异仍保留少量兼容分支，未做全量清除。</p></div>
+    </div>
+  </section>
+
+  <section id="engineering">
+    <h2>工程实践</h2>
+    <ul>
+      <li><strong>测试</strong>：136 项单元测试（出处签名、层级表契约、提交范围、配音门禁、剪映草稿导出，以及时间轴对齐、依赖声明、素材路径、markup 转义、剪映客户端兼容探测等修复回归）；界面 41 项 CDP 探针跑在真实服务上。三轮结果、证据与覆盖缺口逐项记在测试档案 <code>tests/TEST_ARCHIVE.md</code>。</li>
+      <li><strong>出处校验</strong>：逐文件 SHA-256 清单 + RSA-2048 签名，启动时校验，被改动的文件会被点名并拦截启动；私钥不进仓库。</li>
+      <li><strong>零第三方前端依赖</strong>：原生 JS，无框架、无构建步骤，<code>file://</code> 或本地服务都能直接跑。</li>
+      <li><strong>密钥策略</strong>：Key 只存本机、只进内存与本地文件；出站请求经 <code>127.0.0.1</code> 本地代理，代理拒绝内网目标、不记录请求正文。</li>
+      <li><strong>交付验证</strong>：草稿与成片共用一条时间轴；剪辑工程包在检测到新版加密草稿的客户端时自动改交付剪辑清单 CSV + SRT，并给出隔离验证步骤，不写用户草稿目录。</li>
+    </ul>
+    <figure class="shots">
+      <div><img src="screenshots/03-storyboard.jpg" alt="分镜导演界面"><figcaption>分镜导演</figcaption></div>
+      <div><img src="screenshots/04-model-config.jpg" alt="模型与设置界面"><figcaption>模型与设置（四级配置）</figcaption></div>
+      <div><img src="screenshots/05-delivery.jpg" alt="交付中心界面"><figcaption>交付中心</figcaption></div>
+    </figure>
+    <p class="sub">截图均为真实运行界面，未做美化或拼贴。剧本正文属未发表内容，此处不放剧本页。</p>
+  </section>
+
+  <section id="origin">
+    <h2>来源与许可</h2>
+    <div class="card">
+      <p style="color:var(--ink)">本项目原版是 MIT 许可的开源项目 <strong>AI Drama Pipeline</strong>（<code>Copyright (c) 2026 AI Drama Pipeline contributors</code>）。我在此基础上做了架构重构与工程化改造，按 MIT 保留许可全文与 Copyright 声明，新增与修改部分的著作权归本人。</p>
+      <p>主导的部分：模型与配置的四级架构、schema 生成与三层配置编辑器；桌面外壳与本地服务解耦；出处校验体系；项目搬迁与改名工具；交付链路改造与剪映客户端兼容探测。</p>
+      <p><strong>本仓库只含文档、截图与说明，不含源代码。</strong>源码存放在私有仓库，用于面试代码评审、技术交流时可申请只读权限或约线上演示。仓库内容采用「星河制片台 · 展示内容许可 1.0」。</p>
+    </div>
+    <div class="cta">
+      <a class="btn" href="https://github.com/linweinanlin/xinghe-production-desk-showcase">查看 GitHub 展示仓</a>
+      <a class="btn alt" href="https://github.com/linweinanlin/xinghe-production-desk-showcase/issues">申请源码只读 / 线上演示</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>星河制片台 · Xinghe Production Desk — 项目展示页。软件本体在本机运行，不提供在线服务。</div>
+    <div>运行环境：Windows 10/11 · Python 3.9+ · FFmpeg 在 PATH · 需自备模型服务 API Key。</div>
+    <div style="margin-top:8px">
+      <a href="https://github.com/linweinanlin/xinghe-production-desk-showcase">仓库</a> ·
+      <a href="https://github.com/linweinanlin/xinghe-production-desk-showcase/blob/main/README.md">README</a> ·
+      <a href="https://github.com/linweinanlin/xinghe-production-desk-showcase/blob/main/NOTICE">NOTICE / 归属说明</a> ·
+      <a href="sitemap.xml">sitemap</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
